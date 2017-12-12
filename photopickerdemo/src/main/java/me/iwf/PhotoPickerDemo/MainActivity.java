@@ -7,10 +7,13 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+
 import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
@@ -44,10 +47,15 @@ public class MainActivity extends AppCompatActivity {
     findViewById(R.id.button_no_camera).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("/storage/emulated/0/Pictures/Screenshots/Screenshot_20171101-193226.png");
+        list.add("/storage/emulated/0/Pictures/Screenshots/Screenshot_20171101-192518.png");
+        
         PhotoPicker.builder()
                 .setPhotoCount(7)
                 .setShowCamera(false)
                 .setPreviewEnabled(false)
+                .setCustomPhotos(list)
                 .start(MainActivity.this);
       }
     });

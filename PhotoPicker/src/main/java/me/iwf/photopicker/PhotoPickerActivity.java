@@ -21,6 +21,7 @@ import me.iwf.photopicker.fragment.PhotoPickerFragment;
 import static android.widget.Toast.LENGTH_LONG;
 import static me.iwf.photopicker.PhotoPicker.DEFAULT_COLUMN_NUMBER;
 import static me.iwf.photopicker.PhotoPicker.DEFAULT_MAX_COUNT;
+import static me.iwf.photopicker.PhotoPicker.EXTRA_CUSTOM_PHOTOS;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_GRID_COLUMN;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_MAX_COUNT;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_ORIGINAL_PHOTOS;
@@ -51,7 +52,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
     boolean showCamera      = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
     boolean showGif         = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
     boolean previewEnabled  = getIntent().getBooleanExtra(EXTRA_PREVIEW_ENABLED, true);
-
+    ArrayList<String> customPhotos = getIntent().getStringArrayListExtra(EXTRA_CUSTOM_PHOTOS);
+    
     setShowGif(showGif);
 
     setContentView(R.layout.__picker_activity_photo_picker);
@@ -75,7 +77,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
     if (pickerFragment == null) {
       pickerFragment = PhotoPickerFragment
-          .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos);
+          .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos, customPhotos);
       getSupportFragmentManager()
           .beginTransaction()
           .replace(R.id.container, pickerFragment, "tag")
