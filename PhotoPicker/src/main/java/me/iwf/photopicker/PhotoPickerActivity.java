@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import static me.iwf.photopicker.PhotoPicker.EXTRA_ORIGINAL_PHOTOS;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_PREVIEW_ENABLED;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_CAMERA;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_GIF;
+import static me.iwf.photopicker.PhotoPicker.EXTRA_SPECIFIC_PHOTO_DIR;
 import static me.iwf.photopicker.PhotoPicker.KEY_SELECTED_PHOTOS;
 
 public class PhotoPickerActivity extends AppCompatActivity {
@@ -51,7 +53,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
     boolean showCamera      = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
     boolean showGif         = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
     boolean previewEnabled  = getIntent().getBooleanExtra(EXTRA_PREVIEW_ENABLED, true);
-
+    File customPhotoDir     = (File) getIntent().getSerializableExtra(EXTRA_SPECIFIC_PHOTO_DIR);
+    
     setShowGif(showGif);
 
     setContentView(R.layout.__picker_activity_photo_picker);
@@ -75,7 +78,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
     if (pickerFragment == null) {
       pickerFragment = PhotoPickerFragment
-          .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos);
+          .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos, customPhotoDir);
       getSupportFragmentManager()
           .beginTransaction()
           .replace(R.id.container, pickerFragment, "tag")

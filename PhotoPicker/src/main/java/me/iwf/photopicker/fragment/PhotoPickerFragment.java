@@ -23,6 +23,7 @@ import android.widget.Button;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,11 +70,12 @@ public class PhotoPickerFragment extends Fragment {
   private final static String EXTRA_COUNT = "count";
   private final static String EXTRA_GIF = "gif";
   private final static String EXTRA_ORIGIN = "origin";
+  private final static String EXTRA_CUSTOM_PHOTOS_DIR = "custom_photos";
   private ListPopupWindow listPopupWindow;
   private RequestManager mGlideRequestManager;
 
   public static PhotoPickerFragment newInstance(boolean showCamera, boolean showGif,
-      boolean previewEnable, int column, int maxCount, ArrayList<String> originalPhotos) {
+      boolean previewEnable, int column, int maxCount, ArrayList<String> originalPhotos, File customPhotosDir) {
     Bundle args = new Bundle();
     args.putBoolean(EXTRA_CAMERA, showCamera);
     args.putBoolean(EXTRA_GIF, showGif);
@@ -81,6 +83,7 @@ public class PhotoPickerFragment extends Fragment {
     args.putInt(EXTRA_COLUMN, column);
     args.putInt(EXTRA_COUNT, maxCount);
     args.putStringArrayList(EXTRA_ORIGIN, originalPhotos);
+    args.putSerializable(EXTRA_CUSTOM_PHOTOS_DIR, customPhotosDir);
     PhotoPickerFragment fragment = new PhotoPickerFragment();
     fragment.setArguments(args);
     return fragment;
@@ -110,17 +113,37 @@ public class PhotoPickerFragment extends Fragment {
 
     boolean showGif = getArguments().getBoolean(EXTRA_GIF);
     mediaStoreArgs.putBoolean(EXTRA_SHOW_GIF, showGif);
-    MediaStoreHelper.getPhotoDirs(getActivity(), mediaStoreArgs,
-        new MediaStoreHelper.PhotosResultCallback() {
-          @Override public void onResultCallback(List<PhotoDirectory> dirs) {
-            directories.clear();
-            directories.addAll(dirs);
-            photoGridAdapter.notifyDataSetChanged();
-            listAdapter.notifyDataSetChanged();
-            adjustHeight();
-          }
-        });
 
+    File customPhotosDir = (File) getArguments().getSerializable(EXTRA_CUSTOM_PHOTOS_DIR);
+    
+    if (customPhotosDir != null && customPhotosDir.listFiles().length != 0) {
+      File[] customFiles = customPhotosDir.listFiles();
+      
+      PhotoDirectory dir = new PhotoDirectory();
+      dir.setName("Документация");
+      
+      for (int i = 0; i < customFiles.length; i++) {
+        dir.addPhoto(i, customFiles[i].getAbsolutePath());      
+      }
+      
+      directories.clear();
+      directories.add(dir);
+      photoGridAdapter.notifyDataSetChanged();
+      listAdapter.notifyDataSetChanged();
+      adjustHeight();
+    } else {
+      MediaStoreHelper.getPhotoDirs(getActivity(), mediaStoreArgs,
+              new MediaStoreHelper.PhotosResultCallback() {
+                @Override public void onResultCallback(List<PhotoDirectory> dirs) {
+                  directories.clear();
+                  directories.addAll(dirs);
+                  photoGridAdapter.notifyDataSetChanged();
+                  listAdapter.notifyDataSetChanged();
+                  adjustHeight();
+                }
+              });
+    }
+    
     captureManager = new ImageCaptureManager(getActivity());
   }
 

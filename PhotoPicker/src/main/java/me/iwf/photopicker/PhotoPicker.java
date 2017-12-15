@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+
+import java.io.File;
 import java.util.ArrayList;
 
 import me.iwf.photopicker.utils.PermissionsUtils;
@@ -22,12 +24,13 @@ public class PhotoPicker {
 
   public final static String KEY_SELECTED_PHOTOS   = "SELECTED_PHOTOS";
 
-  public final static String EXTRA_MAX_COUNT       = "MAX_COUNT";
-  public final static String EXTRA_SHOW_CAMERA     = "SHOW_CAMERA";
-  public final static String EXTRA_SHOW_GIF        = "SHOW_GIF";
-  public final static String EXTRA_GRID_COLUMN     = "column";
-  public final static String EXTRA_ORIGINAL_PHOTOS = "ORIGINAL_PHOTOS";
-  public final static String EXTRA_PREVIEW_ENABLED = "PREVIEW_ENABLED";
+  public final static String EXTRA_MAX_COUNT          = "MAX_COUNT";
+  public final static String EXTRA_SHOW_CAMERA        = "SHOW_CAMERA";
+  public final static String EXTRA_SHOW_GIF           = "SHOW_GIF";
+  public final static String EXTRA_GRID_COLUMN        = "column";
+  public final static String EXTRA_ORIGINAL_PHOTOS    = "ORIGINAL_PHOTOS";
+  public final static String EXTRA_PREVIEW_ENABLED    = "PREVIEW_ENABLED";
+  public final static String EXTRA_SPECIFIC_PHOTO_DIR = "SPECIFIC_PHOTO_DIR";
 
   public static PhotoPickerBuilder builder() {
     return new PhotoPickerBuilder();
@@ -120,6 +123,11 @@ public class PhotoPicker {
 
     public PhotoPickerBuilder setSelected(ArrayList<String> imagesUri) {
       mPickerOptionsBundle.putStringArrayList(EXTRA_ORIGINAL_PHOTOS, imagesUri);
+      return this;
+    }
+
+    public PhotoPickerBuilder setSpecificPhotoDir(File photoDir) {
+      mPickerOptionsBundle.putSerializable(EXTRA_SPECIFIC_PHOTO_DIR, photoDir);
       return this;
     }
 
