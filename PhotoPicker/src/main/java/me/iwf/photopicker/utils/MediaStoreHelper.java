@@ -6,9 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import java.lang.ref.WeakReference;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.R;
 import me.iwf.photopicker.entity.PhotoDirectory;
@@ -55,6 +56,8 @@ public class MediaStoreHelper {
       photoDirectoryAll.setName(context.getString(R.string.__picker_all_image));
       photoDirectoryAll.setId("ALL");
 
+      if (!data.moveToFirst()) return;
+      
       while (data.moveToNext()) {
 
         int imageId  = data.getInt(data.getColumnIndexOrThrow(_ID));
