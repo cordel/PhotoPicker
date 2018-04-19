@@ -56,32 +56,31 @@ public class MediaStoreHelper {
       photoDirectoryAll.setName(context.getString(R.string.__picker_all_image));
       photoDirectoryAll.setId("ALL");
 
-      if (!data.moveToFirst()) return;
-      
-      while (data.moveToNext()) {
-
-        int imageId  = data.getInt(data.getColumnIndexOrThrow(_ID));
-        String bucketId = data.getString(data.getColumnIndexOrThrow(BUCKET_ID));
-        String name = data.getString(data.getColumnIndexOrThrow(BUCKET_DISPLAY_NAME));
-        String path = data.getString(data.getColumnIndexOrThrow(DATA));
-        long size = data.getInt(data.getColumnIndexOrThrow(SIZE));
-
-        if (size < 1) continue;
-
-        PhotoDirectory photoDirectory = new PhotoDirectory();
-        photoDirectory.setId(bucketId);
-        photoDirectory.setName(name);
-
-        if (!directories.contains(photoDirectory)) {
-          photoDirectory.setCoverPath(path);
-          photoDirectory.addPhoto(imageId, path);
-          photoDirectory.setDateAdded(data.getLong(data.getColumnIndexOrThrow(DATE_ADDED)));
-          directories.add(photoDirectory);
-        } else {
-          directories.get(directories.indexOf(photoDirectory)).addPhoto(imageId, path);
-        }
-
-        photoDirectoryAll.addPhoto(imageId, path);
+      if (data.moveToFirst()) {
+        do {
+          int imageId  = data.getInt(data.getColumnIndexOrThrow(_ID));
+          String bucketId = data.getString(data.getColumnIndexOrThrow(BUCKET_ID));
+          String name = data.getString(data.getColumnIndexOrThrow(BUCKET_DISPLAY_NAME));
+          String path = data.getString(data.getColumnIndexOrThrow(DATA));
+          long size = data.getInt(data.getColumnIndexOrThrow(SIZE));
+  
+          if (size < 1) continue;
+  
+          PhotoDirectory photoDirectory = new PhotoDirectory();
+          photoDirectory.setId(bucketId);
+          photoDirectory.setName(name);
+  
+          if (!directories.contains(photoDirectory)) {
+            photoDirectory.setCoverPath(path);
+            photoDirectory.addPhoto(imageId, path);
+            photoDirectory.setDateAdded(data.getLong(data.getColumnIndexOrThrow(DATE_ADDED)));
+            directories.add(photoDirectory);
+          } else {
+            directories.get(directories.indexOf(photoDirectory)).addPhoto(imageId, path);
+          }
+  
+          photoDirectoryAll.addPhoto(imageId, path);
+        } while (data.moveToNext());
       }
       if (photoDirectoryAll.getPhotoPaths().size() > 0) {
         photoDirectoryAll.setCoverPath(photoDirectoryAll.getPhotoPaths().get(0));
