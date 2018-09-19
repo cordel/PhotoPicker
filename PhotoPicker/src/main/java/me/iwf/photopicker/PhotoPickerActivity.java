@@ -3,12 +3,13 @@ package me.iwf.photopicker;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import me.iwf.photopicker.event.OnItemCheckListener;
 import me.iwf.photopicker.fragment.ImagePagerFragment;
 import me.iwf.photopicker.fragment.PhotoPickerFragment;
 
-import static android.widget.Toast.LENGTH_LONG;
 import static me.iwf.photopicker.PhotoPicker.DEFAULT_COLUMN_NUMBER;
 import static me.iwf.photopicker.PhotoPicker.DEFAULT_MAX_COUNT;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_GRID_COLUMN;
@@ -101,8 +101,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         }
 
         if (selectedItemCount > maxCount) {
-          Toast.makeText(getActivity(), getString(R.string.__picker_over_max_count_tips, maxCount),
-              LENGTH_LONG).show();
+          snack(getString(R.string.__picker_over_max_count_tips, maxCount));
           return false;
         }
         if(maxCount > 1){
@@ -225,5 +224,14 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
   public void setShowGif(boolean showGif) {
     this.showGif = showGif;
+  }
+
+  private void snack(String message) {
+    View view = findViewById(R.id.container);
+    
+    Snackbar.make(
+                    view, message, Snackbar.LENGTH_LONG
+            )
+            .show();
   }
 }

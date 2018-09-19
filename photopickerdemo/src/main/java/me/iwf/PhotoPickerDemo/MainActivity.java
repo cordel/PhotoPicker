@@ -7,10 +7,13 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+
 import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         PhotoPicker.builder()
-                .setPhotoCount(9)
+                .setPhotoCount(2)
                 .setGridColumnCount(4)
                 .start(MainActivity.this);
       }
